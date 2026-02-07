@@ -1,0 +1,49 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <climits>
+#include <queue>
+using namespace std;
+typedef long long ll;
+typedef long long d1;
+
+#define PQUE_ASC(a, b)  ((a) > (b))
+#define PQUE_DEC(a, b)  ((a) < (b))
+#define SORT_ASC(a, b)  ((a) < (b))
+#define SORT_DEC(a, v)  ((a) > (b))
+
+#define SORT_THEM   0x01
+template <typename T>
+int get_array(vector<T>& vec, int sze = -1, int opt = 0) {
+    int n = sze;
+    if (sze == -1) { cin >> n; }
+    vec.clear();
+    vec.reserve(n);
+    for (int i = 0; i < n; i++) { T x; cin >> x; vec.push_back(x); }
+    if(opt & SORT_THEM) { sort(vec.begin(), vec.end()); }
+    return n;
+}
+
+typedef pair<ll, ll> d2;
+typedef tuple<ll, ll, ll> d3;
+
+priority_queue<d1, vector<d1>, greater<d1>> pq;
+d1 N;
+
+void solve(void){
+    d1 tmp;
+    cin >> N;
+    for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){ cin >> tmp; pq.push(tmp); }
+        if (i) { for(int j=0;j<N;j++){ pq.pop(); } }
+    }
+    cout << pq.top();
+    return;
+}
+
+int main(void){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    solve();
+    return 0;
+}

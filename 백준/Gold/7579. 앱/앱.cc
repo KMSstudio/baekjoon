@@ -11,7 +11,7 @@ typedef long long ll;
 #define SORT_ASC(a, b)  ((a) < (b))
 #define SORT_DEC(a, b)  ((a) > (b))
 
-typedef long long           d1;
+typedef int           d1;
 typedef pair<d1, d1>        d2;
 typedef tuple<d1, d1, d1>   d3;
 typedef pair< d1, d2 >      dc;
@@ -35,7 +35,7 @@ vec< d1 > m;
 vec< d1 > c;
 d1 N, M;
 
-const d1 ABSOLUTE_INFTY = LLONG_MAX/5;
+const d1 ABSOLUTE_INFTY = INT_MAX/2;
 d1 dy[10000001] = { 0, };
 
 void solve(void){

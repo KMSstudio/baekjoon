@@ -37,27 +37,22 @@ int n;
 vec< int > A;
 vec< int > PA;
 vec< int > R;
-vec< int > PR;
 
 void solve(void){
-    int sze;
+    int sze, fnd;
     cin >> n;
     A.resize(n); PA.resize(n); for(int& a:A){ cin >> a; }
-    R.clear(); PR.clear(); sze = 0;
+    R.clear(); sze = 0;
     for(int i=0;i<n;i++){
         int a = A[i];
         int pos = lower_bound(ALL(R), a) - R.begin();
-        if(pos == sze){ R.push_back(a); PR.push_back(i); sze++; }
-        else{ R[pos] = a; PR[pos] = i; }
-        PA[i] = (pos == 0) ? -1 : PR[pos-1];
+        if(pos == sze){ R.push_back(a); PA[i] = sze; sze++; }
+        else{ R[pos] = a; PA[i] = pos; }
     }
     cout << sze << '\n';
-    for(int idx = PR[sze-1];idx != -1; idx = PA[idx]) {
-        R[--sze] = A[idx];
-    }
-    for(int& r:R){
-        cout << r << ' ';
-    }
+    fnd = sze-1;
+    for(int i=n-1;i>=0;i--){ if(PA[i] == fnd){ R[fnd] = A[i]; fnd--; } }
+    for(int& r:R){ cout << r << ' '; }
     cout << '\n';
 }
 

@@ -47,6 +47,18 @@ vec< res_num > dy;
 vec< reg_num > pv;
 que< pair< res_num, pair<reg_num, reg_num> > > Q;
 
+void path(int x){
+    reg_num p = pv[x];
+    if(p == -1){ return; }
+    path(p);
+
+    if(D(p) == x){ cout << 'D'; return; }
+    if(S(p) == x){ cout << 'S'; return; }
+    if(L(p) == x){ cout << 'L'; return; }
+    if(R(p) == x){ cout << 'R'; return; }
+    return;
+}
+
 void solve(void){
     reg_num a, b, v, p;
     res_num w;
@@ -68,17 +80,9 @@ void solve(void){
         if(dy[L(v)] == -1){ Q.push(mp(w+1, mp(L(v), v))); }
         if(dy[R(v)] == -1){ Q.push(mp(w+1, mp(R(v), v))); }
     }
-
-    res = "";
-    for(reg_num c = b; c != -1; c = p){
-        p = pv[c];
-        if(D(p) == c){ res.push_back('D'); }
-        else if(S(p) == c){ res.push_back('S'); }
-        else if(L(p) == c){ res.push_back('L'); }
-        else if(R(p) == c){ res.push_back('R'); }
-    }
-    reverse(ALL(res));
-    cout << res << '\n';
+    
+    path(b);
+    cout << '\n';
 
     return;
 }

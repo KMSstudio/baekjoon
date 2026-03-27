@@ -35,6 +35,7 @@ template <typename T> using vvc = std::vector<std::vector<T>>;
 #define rev(v)  std::reverse(ALL(v))
 
 vvc< int > dy;
+vvc< int > path;
 string A, B;
 int A_l, B_l;
 
@@ -45,12 +46,15 @@ void solve(void){
     A_l = A.length(); B_l = B.length();
     A.insert(0, "?"); B.insert(0, "?");
     dy.resize(A_l+1, vec<int>(B_l+1, 0));
+    path.resize(A_l+1, vector<int>(B_l+1, 0));
 
     for(int i=1;i<=A_l;i++){
         for(int j=1;j<=B_l;j++){
             dy[i][j] = max(dy[i-1][j], dy[i][j-1]);
+            path[i][j] = (dy[i-1][j] < dy[i][j-1]) + 1;
             if(A[i] == B[j] && dy[i][j] < dy[i-1][j-1]+1){
                 dy[i][j] = dy[i-1][j-1]+1;
+                path[i][j] = 3;
             }
         }
     }
@@ -58,9 +62,9 @@ void solve(void){
     fnd = dy[A_l][B_l]; R = "";
     cout << fnd << '\n';
     for(int r = A_l, c = B_l; r != 0 && c != 0; ){
-        if(dy[r][c] == dy[r-1][c]){ r--; continue; }
-        if(dy[r][c] == dy[r][c-1]){ c--; continue; }
-        R.push_back(A[r]); r--; c--;
+        pth = path[r][c];
+        if(pth == 3){ R.push_back(A[r]); }
+        r -= pth & 1; c -= pth >> 1;
     }
     reverse(ALL(R));
     cout << R << '\n';

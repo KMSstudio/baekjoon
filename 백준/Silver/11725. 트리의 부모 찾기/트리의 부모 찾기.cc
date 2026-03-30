@@ -45,13 +45,12 @@ void DFS(int cur){
     }
 }
 
-int main(void){
+void solve(void){
     int a, b;
     cin >> n;
     P.resize(n+1, 0); E.resize(n+1);
     for(int i=0;i<n-1;i++){
         cin >> a >> b;
-
         E[a].push_back(b); E[b].push_back(a);
     }
 
@@ -60,5 +59,13 @@ int main(void){
     for(int i=2;i<=n;i++){
         cout << P[i] << '\n';
     }
+    return;
+}
+
+int main(void){ 
+    int TT = 1;
+    ios::sync_with_stdio(false); cin.tie(0);
+    // cin >> TT;
+    for(int i=0;i<TT;i++){ solve(); }
     return 0;
 }

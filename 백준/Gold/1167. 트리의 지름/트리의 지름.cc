@@ -1,62 +1,73 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 using namespace std;
 
-typedef long long i1;
-typedef pair<i1, int> i2;
+typedef int                 i1;
+typedef pair< i1, i1 >      i2;
+
+template <typename T> using vec = std::vector<T>;
+template <typename T> using vvc = std::vector<std::vector<T>>;
+
+#define mp      std::make_pair
 
 int n;
-vector<vector<i2>> E;
-vector<i1> W;
-i1 res;
+vvc< i2 > E;
+vec< i1 > W;
+int res;
 int nod;
 
-void dfs(int cur){
-    if(res < W[cur]){
-        res = W[cur];
-        nod = cur;
-    }
+void dfs(int start){
+    vector<int> st;
+    st.push_back(start);
 
-    for(const i2& p : E[cur]){
-        i1 wei = p.first;
-        int nxt = p.second;
-        if(W[nxt] != -1) continue;
-        W[nxt] = W[cur] + wei;
-        dfs(nxt);
+    while(!st.empty()){
+        int cur = st.back();
+        st.pop_back();
+
+        if(res < W[cur]){
+            res = W[cur];
+            nod = cur;
+        }
+
+        for(const i2& p : E[cur]){
+            int nxt = p.second;
+            int wei = p.first;
+
+            if(W[nxt] != -1) continue;
+
+            W[nxt] = W[cur] + wei;
+            st.push_back(nxt);
+        }
     }
 }
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
+void solve(void){
+    int cur, nxt, wei;
     cin >> n;
-    E.assign(n + 1, {});
-
-    for(int i = 0; i < n; i++){
-        int cur;
+    E.resize(n+1);
+    for(int i=0;i<n;i++){
         cin >> cur;
-        while(true){
-            int nxt;
+        for(;;){
             cin >> nxt;
-            if(nxt == -1) break;
-            i1 wei;
+            if(nxt == -1){ break; }
             cin >> wei;
-            E[cur].emplace_back(wei, nxt);
+            E[cur].push_back(mp(wei, nxt));
         }
     }
 
-    W.assign(n + 1, -1);
-    W[1] = 0;
-    nod = 1;
-    res = 0;
-    dfs(1);
-
-    W.assign(n + 1, -1);
-    W[nod] = 0;
-    res = 0;
-    dfs(nod);
-
+    W.clear(); W.resize(n+1, -1);
+    nod = 1; res = W[1] = 0; dfs(1);
+    W.clear(); W.resize(n+1, -1);
+    res = W[nod] = 0; dfs(nod);
     cout << res << '\n';
+    return;
+}
+
+int main(void){ 
+    int TT = 1;
+    ios::sync_with_stdio(false); cin.tie(0);
+    // cin >> TT;
+    for(int i=0;i<TT;i++){ solve(); }
     return 0;
 }

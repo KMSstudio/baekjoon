@@ -37,11 +37,10 @@ template <typename T> using vvc = std::vector<std::vector<T>>;
 int n, m;
 vvc< int > dist;
 vvc< int > from;
-vec< int > path;
 
 void solve(void){
     int a, b, w;
-    int sze;
+    vec< int > path;
     cin >> n >> m;
     dist.resize(n+1, vec<int>(n+1, -1));
     from.resize(n+1, vec<int>(n+1, -1));
@@ -70,17 +69,17 @@ void solve(void){
         }
         cout << '\n';
     }
-    path.resize(n+1);
     for(int stt=1;stt<=n;stt++){
         for(int fin=1;fin<=n;fin++){
-            if(dist[stt][fin] <= 0){ cout << 0 << '\n'; continue; }
-            sze = 0;
+            if(dist[stt][fin] <= 0){ cout << "0\n"; continue; }
+            path.clear();
             for(int cur = fin; cur != stt; cur = from[stt][cur]) {
-                path[sze++] = cur;
+                path.push_back(cur);
             }
-            if(sze != 0){ path[sze++] = stt; }
-            cout << sze << ' ';
-            for(int idx = sze-1; idx>=0; idx--){ cout << path[idx] << ' '; }
+            if(path.size()){ path.push_back(stt); }
+            reverse(ALL(path));
+            cout << path.size() << ' ';
+            for(int& nod:path){ cout << nod << ' '; }
             cout << '\n';
         }
     }

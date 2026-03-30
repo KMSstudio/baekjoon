@@ -1,24 +1,63 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
+#include <cstdio>
 using namespace std;
 
-typedef int                 i1;
-typedef pair< i1, i1 >      i2;
+struct FastInput{
+    static const int SZ = 1 << 20;
+    int idx, size;
+    char buf[SZ];
 
-template <typename T> using vec = std::vector<T>;
-template <typename T> using vvc = std::vector<std::vector<T>>;
+    FastInput(): idx(0), size(0) {}
 
-#define mp      std::make_pair
+    inline int read(){
+        if(idx >= size){
+            size = (int)fread(buf, 1, SZ, stdin);
+            idx = 0;
+            if(size == 0) return EOF;
+        }
+        return buf[idx++];
+    }
+
+    template<typename T>
+    inline bool readInt(T& out){
+        int c = read();
+        T sign = 1;
+        T num = 0;
+
+        while(c != EOF && c <= ' ') c = read();
+        if(c == EOF) return false;
+
+        if(c == '-'){
+            sign = -1;
+            c = read();
+        }
+
+        while(c >= '0' && c <= '9'){
+            num = num * 10 + (c - '0');
+            c = read();
+        }
+
+        out = num * sign;
+        return true;
+    }
+};
+
+typedef int i1;
+typedef pair<i1, i1> i2;
+
+template <typename T> using vec = vector<T>;
+template <typename T> using vvc = vector<vector<T>>;
 
 int n;
-vvc< i2 > E;
-vec< i1 > W;
+vvc<i2> E;
+vec<i1> W;
 int res;
 int nod;
+vector<int> st;
 
 void dfs(int start){
-    vector<int> st;
+    st.clear();
     st.push_back(start);
 
     while(!st.empty()){
@@ -40,32 +79,38 @@ void dfs(int start){
     }
 }
 
-void solve(void){
+void solve(){
+    FastInput in;
     int cur, nxt, wei;
-    cin >> n;
-    E.resize(n+1);
-    for(int i=0;i<n;i++){
-        cin >> cur;
-        for(;;){
-            cin >> nxt;
-            if(nxt == -1){ break; }
-            cin >> wei;
-            E[cur].push_back(mp(wei, nxt));
+
+    in.readInt(n);
+    E.assign(n + 1, {});
+
+    for(int i = 0; i < n; i++){
+        in.readInt(cur);
+        while(true){
+            in.readInt(nxt);
+            if(nxt == -1) break;
+            in.readInt(wei);
+            E[cur].push_back({wei, nxt});
         }
     }
 
-    W.assign(n+1, -1);
-    nod = 1; res = W[1] = 0; dfs(1);
-    W.assign(n+1, -1);
-    res = W[nod] = 0; dfs(nod);
-    cout << res << '\n';
-    return;
+    W.assign(n + 1, -1);
+    W[1] = 0;
+    nod = 1;
+    res = 0;
+    dfs(1);
+
+    W.assign(n + 1, -1);
+    W[nod] = 0;
+    res = 0;
+    dfs(nod);
+
+    printf("%d\n", res);
 }
 
-int main(void){ 
-    int TT = 1;
-    ios::sync_with_stdio(false); cin.tie(0);
-    // cin >> TT;
-    for(int i=0;i<TT;i++){ solve(); }
+int main(){
+    solve();
     return 0;
 }

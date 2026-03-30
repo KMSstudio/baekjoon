@@ -33,9 +33,7 @@ void dfs(int start){
         for(const i2& p : E[cur]){
             int nxt = p.second;
             int wei = p.first;
-
             if(W[nxt] != -1) continue;
-
             W[nxt] = W[cur] + wei;
             st.push_back(nxt);
         }
@@ -56,9 +54,9 @@ void solve(void){
         }
     }
 
-    W.clear(); W.resize(n+1, -1);
+    W.assign(n+1, -1);
     nod = 1; res = W[1] = 0; dfs(1);
-    W.clear(); W.resize(n+1, -1);
+    W.assign(n+1, -1);
     res = W[nod] = 0; dfs(nod);
     cout << res << '\n';
     return;
